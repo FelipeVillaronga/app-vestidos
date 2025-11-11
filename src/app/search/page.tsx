@@ -1,43 +1,141 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import {listItems, type Category} from "../../../lib/RentalManagementSystem";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
-type SearchParams = {
-  q?: string;
-  category?: Category | "";
-  size?: string;
-  color?: string;
-  style?: string;
-  start?: string;
-  end?: string;
-};
+export default function Page() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  
+  const [q, setQ] = useState(searchParams.get("q") || "");
+  const [category, setCategory] = useState<Category | "">(
+    (searchParams.get("category") as Category) || ""
+  );
+  const [size, setSize] = useState(searchParams.get("size") || "");
+  const [color, setColor] = useState(searchParams.get("color") || "");
+  const [style, setStyle] = useState(searchParams.get("style") || "");
 
-export default function Page({ searchParams }: { searchParams: SearchParams }) {
-  const { q = "", category = "", size = "", color = "", style = "" } = searchParams;
   const items = listItems({
-    q,
+    q: q || undefined,
     category: category || undefined,
     size: size || undefined,
     color: color || undefined,
     style: style || undefined,
   });
 
+  // Reset size when category changes to avoid invalid combinations
+  useEffect(() => {
+    if (category === "bag") {
+      setSize("");
+    }
+  }, [category]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (q) params.set("q", q);
+    if (category) params.set("category", category);
+    if (size) params.set("size", size);
+    if (color) params.set("color", color);
+    if (style) params.set("style", style);
+    router.push(`/search?${params.toString()}`);
+  };
+
+  const renderSizeInput = () => {
+    // Bags don't have size
+    if (category === "bag") {
+      return null;
+    }
+
+    // Dresses and Jackets use XS, S, M, L, XL
+    if (category === "dress" || category === "jacket") {
+      return (
+        <select 
+          value={size} 
+          onChange={(e) => setSize(e.target.value)}
+          className="rounded-xl border px-3 py-2 text-sm"
+        >
+          <option value="">All sizes</option>
+          <option value="XS">XS</option>
+          <option value="S">S</option>
+          <option value="M">M</option>
+          <option value="L">L</option>
+          <option value="XL">XL</option>
+        </select>
+      );
+    }
+
+    // Shoes use numeric sizes
+    if (category === "shoes") {
+      return (
+        <select 
+          value={size} 
+          onChange={(e) => setSize(e.target.value)}
+          className="rounded-xl border px-3 py-2 text-sm"
+        >
+          <option value="">All sizes</option>
+          {Array.from({ length: 14 }, (_, i) => i + 35).map((num) => (
+            <option key={num} value={num}>{num}</option>
+          ))}
+        </select>
+      );
+    }
+
+    // Default: show dropdown with common sizes for when no category is selected
+    return (
+      <select 
+        value={size} 
+        onChange={(e) => setSize(e.target.value)}
+        className="rounded-xl border px-3 py-2 text-sm"
+      >
+        <option value="">All sizes</option>
+        <option value="XS">XS</option>
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+        <option value="XL">XL</option>
+      </select>
+    );
+  };
+
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
       <h1 className="text-2xl sm:text-3xl font-bold">Browse catalog</h1>
-      <form method="GET" className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
-        <input name="q" defaultValue={q} placeholder="Search…" className="rounded-xl border px-3 py-2 text-sm" />
-        <select name="category" defaultValue={category} className="rounded-xl border px-3 py-2 text-sm">
+      <form onSubmit={handleSubmit} className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+        <input 
+          value={q} 
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Search…" 
+          className="rounded-xl border px-3 py-2 text-sm" 
+        />
+        <select 
+          value={category} 
+          onChange={(e) => setCategory(e.target.value as Category | "")}
+          className="rounded-xl border px-3 py-2 text-sm"
+        >
           <option value="">All categories</option>
           <option value="dress">Dresses</option>
           <option value="shoes">Shoes</option>
           <option value="bag">Bags</option>
           <option value="jacket">Jackets</option>
         </select>
-        <input name="size" defaultValue={size} placeholder="Size" className="rounded-xl border px-3 py-2 text-sm" />
-        <input name="color" defaultValue={color} placeholder="Color" className="rounded-xl border px-3 py-2 text-sm" />
-        <input name="style" defaultValue={style} placeholder="Style (e.g., cocktail)" className="rounded-xl border px-3 py-2 text-sm" />
-        <button className="rounded-xl bg-fuchsia-600 text-white px-4 py-2 text-sm">Search</button>
+        {renderSizeInput()}
+        <input 
+          value={color} 
+          onChange={(e) => setColor(e.target.value)}
+          placeholder="Color" 
+          className="rounded-xl border px-3 py-2 text-sm" 
+        />
+        <input 
+          value={style} 
+          onChange={(e) => setStyle(e.target.value)}
+          placeholder="Style (e.g., cocktail)" 
+          className="rounded-xl border px-3 py-2 text-sm" 
+        />
+        <button type="submit" className="rounded-xl bg-fuchsia-600 text-white px-4 py-2 text-sm">Search</button>
       </form>
 
       <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
