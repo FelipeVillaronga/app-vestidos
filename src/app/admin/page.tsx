@@ -1,6 +1,9 @@
 import { isAdmin, getOrCreateCsrfToken } from "@/lib/CsrfSessionManagement";
 import { listItems, listRentals } from "@/lib/RentalManagementSystem";
 import { redirect } from "next/navigation";
+import DeleteItemButton from "@/src/components/DeleteItemButton";
+import EditItemModal from "@/src/components/EditItemModal";
+import AddItemModal from "@/src/components/AddItemModal";
 
 type AdminItem = {
   id: number | string;
@@ -8,6 +11,9 @@ type AdminItem = {
   category: string;
   sizes: string[];
   pricePerDay: number;
+  color: string;
+  style?: string;
+  description: string;
 };
 
 export default async function Page() {
@@ -22,32 +28,48 @@ export default async function Page() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Admin dashboard</h1>
         <form action="/api/admin/logout" method="POST">
-          <button className="text-sm rounded-lg border px-3 py-2">Sign out</button>
+          <button className="text-sm rounded-lg border px-3 py-2">
+            Sign out
+          </button>
         </form>
       </div>
 
       <section className="mt-8">
-        <h2 className="font-semibold">Inventory</h2>
-        <p className="text-sm text-slate-600 dark:text-slate-400">Add/edit/delete can be wired to a database later.</p>
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <h2 className="font-semibold">Inventory</h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              Add/edit/delete can be wired to a database later.
+            </p>
+          </div>
+          <AddItemModal csrf={csrf} />
+        </div>
         <div className="mt-3 overflow-x-auto">
           <table className="min-w-full text-sm">
-            <thead id='table-header'>
+            <thead id="table-header">
               <tr className="text-left">
                 <th className="py-2 pr-4">ID</th>
                 <th className="py-2 pr-4">Name</th>
                 <th className="py-2 pr-4">Category</th>
                 <th className="py-2 pr-4">Sizes</th>
                 <th className="py-2 pr-4">Price/day</th>
+                <th className="py-2 pr-4">Actions</th>
               </tr>
             </thead>
             <tbody>
-            {items.map((i: AdminItem) => (
+              {items.map((i: AdminItem) => (
                 <tr key={i.id} className="border-t">
                   <td className="py-2 pr-4">{i.id}</td>
                   <td className="py-2 pr-4">{i.name}</td>
                   <td className="py-2 pr-4">{i.category}</td>
                   <td className="py-2 pr-4">{i.sizes.join(", ")}</td>
                   <td className="py-2 pr-4">${i.pricePerDay}</td>
+                  <td className="py-2 pr-4">
+                    <div className="flex gap-2">
+                      <EditItemModal item={i} csrf={csrf} />
+                      <DeleteItemButton itemId={i.id} csrf={csrf} />
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -79,20 +101,21 @@ export default async function Page() {
                   </td>
                   <td className="py-2 pr-4">
                     {r.customer.name}
-                    <div className="text-slate-500 text-xs">{r.customer.email} • {r.customer.phone}</div>
+                    <div className="text-slate-500 text-xs">
+                      {r.customer.email} • {r.customer.phone}
+                    </div>
                   </td>
                   <td className="py-2 pr-4 capitalize">{r.status}</td>
                   <td className="py-2 pr-4">
                     {r.status === "active" ? (
                       <form
-                        onSubmit={async (e) => {
-                          // no-op on server; keep for semantics
-                        }}
                         action={`/api/admin/rentals/${r.id}/cancel`}
                         method="POST"
                       >
                         <input type="hidden" name="csrf" value={csrf} />
-                        <button className="rounded-lg border px-3 py-1 hover:bg-slate-50 dark:hover:bg-slate-800">Cancel</button>
+                        <button className="rounded-lg border px-3 py-1 hover:bg-slate-50 dark:hover:bg-slate-800">
+                          Cancel
+                        </button>
                       </form>
                     ) : (
                       <span className="text-slate-400">—</span>
@@ -102,7 +125,9 @@ export default async function Page() {
               ))}
               {rentals.length === 0 && (
                 <tr>
-                  <td className="py-3 text-slate-500" colSpan={6}>No rentals yet.</td>
+                  <td className="py-3 text-slate-500" colSpan={6}>
+                    No rentals yet.
+                  </td>
                 </tr>
               )}
             </tbody>

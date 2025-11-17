@@ -24,7 +24,7 @@ export type Rental = {
 };
 
 // In-memory store for demo. Replace with a DB in production.
-const items: Item[] = [
+const initialItems: Item[] = [
   {
     id: 1,
     name: "Silk Evening Gown",
@@ -75,7 +75,17 @@ const items: Item[] = [
   },
 ];
 
-let rentals: Rental[] = [];
+// Use globalThis to persist data across hot reloads in development
+declare global {
+  var _items: Item[] | undefined;
+  var _rentals: Rental[] | undefined;
+}
+
+const items: Item[] = globalThis._items || [...initialItems];
+globalThis._items = items;
+
+const rentals: Rental[] = globalThis._rentals || [];
+globalThis._rentals = rentals;
 
 export function listItems(filters?: {
   q?: string;
@@ -133,4 +143,32 @@ export function cancelRental(id: string) {
   if (!r) return { error: "Not found" as const };
   r.status = "canceled";
   return { ok: true as const };
+}
+
+export function deleteItem(id: number) {
+  const idx = items.findIndex((i) => i.id === id);
+  if (idx === -1) return { error: "Not found" as const };
+  items.splice(idx, 1);
+  return { ok: true as const };
+}
+
+export function updateItem(id: number, updates: Partial<Omit<Item, "id">>) {
+  const idx = items.findIndex((i) => i.id === id);
+  if (idx === -1) return { error: "Not found" as const };
+  items[idx] = { ...items[idx], ...updates };
+  return { item: items[idx] };
+}
+
+export function addItem(itemData: Omit<Item, "id">) {
+  // Generar un nuevo ID (el máximo ID actual + 1)
+  const maxId = items.length > 0 ? Math.max(...items.map((i) => i.id)) : 0;
+  const newId = maxId + 1;
+
+  const newItem: Item = {
+    id: newId,
+    ...itemData,
+  };
+
+  items.push(newItem);
+  return { item: newItem };
 }

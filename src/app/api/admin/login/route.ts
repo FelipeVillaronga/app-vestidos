@@ -10,9 +10,21 @@ export async function POST(req: Request) {
   const username = (form.get("username") || "").toString();
   const password = (form.get("password") || "").toString();
 
-  const expectedPass = process.env.ADMIN_PASSWORD || "admin123"; // set securely in env
-  const expectedUsr = process.env.ADMIN_PASSWORD || "admin123";
-  if (!username || username !== expectedUsr || password !== expectedPass) {
+  // Read credentials from environment variables
+  const expectedUsername = process.env.ADMIN_USERNAME;
+  const expectedPassword = process.env.ADMIN_PASSWORD;
+
+  // Security check: ensure environment variables are set
+  if (!expectedUsername || !expectedPassword) {
+    console.error("SECURITY ERROR: Admin credentials not configured in environment variables!");
+    return NextResponse.json(
+      { error: "Server configuration error. Please contact administrator." },
+      { status: 500 }
+    );
+  }
+
+  // Validate credentials
+  if (!username || !password || username !== expectedUsername || password !== expectedPassword) {
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
   }
 
