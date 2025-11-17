@@ -66,7 +66,8 @@ export default function EditItemModal({ item, csrf }: EditItemModalProps) {
       if (response.ok) {
         alert("Artículo actualizado correctamente");
         setIsOpen(false);
-        window.location.reload();
+        // Force a hard reload by adding a timestamp
+        window.location.href = window.location.pathname + "?t=" + Date.now();
       } else {
         alert(
           "Error al actualizar el vestido: " + (data.error || "Unknown error")

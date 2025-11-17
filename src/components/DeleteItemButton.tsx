@@ -28,7 +28,8 @@ export default function DeleteItemButton({
       const data = await response.json();
 
       if (response.ok) {
-        window.location.reload();
+        // Force a hard reload by adding a timestamp
+        window.location.href = window.location.pathname + "?t=" + Date.now();
       } else {
         alert("Error al borrar el vestido: " + (data.error || "Unknown error"));
       }

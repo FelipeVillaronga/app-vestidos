@@ -1,5 +1,9 @@
-import {NextResponse} from "next/server";
-import {listItems} from "../../../../lib/RentalManagementSystem";
+import { NextResponse } from "next/server";
+import { listItems } from "../../../../lib/RentalManagementSystem";
+
+// Disable caching for this API route
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -21,5 +25,11 @@ export function GET(req: Request) {
     alt: i.alt,
   }));
 
-  return NextResponse.json({ items });
+  return NextResponse.json({ items }, {
+    headers: {
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+    }
+  });
 }

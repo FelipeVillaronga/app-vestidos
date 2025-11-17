@@ -72,7 +72,8 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
           images: "",
           alt: "",
         });
-        window.location.reload();
+        // Force a hard reload by adding a timestamp
+        window.location.href = window.location.pathname + "?t=" + Date.now();
       } else {
         alert(
           "Error al agregar el artículo: " + (data.error || "Unknown error")

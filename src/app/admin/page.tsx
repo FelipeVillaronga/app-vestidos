@@ -5,6 +5,10 @@ import DeleteItemButton from "@/src/components/DeleteItemButton";
 import EditItemModal from "@/src/components/EditItemModal";
 import AddItemModal from "@/src/components/AddItemModal";
 
+// Disable caching for admin page to always show fresh data
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 type AdminItem = {
   id: number | string;
   name: string;
