@@ -25,6 +25,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - Git
 
 Check your versions:
+
 - macOS/Linux: `node -v && npm -v`
 - Windows (PowerShell or CMD): `node -v && npm -v`
 
@@ -32,29 +33,38 @@ Check your versions:
 
 ### macOS
 
-1) Install Node.js
-    - Recommended: Use the official installer from https://nodejs.org or a version manager like nvm.
-2) Clone the repository
-    - `git clone <your-repo-url> && cd <your-project-folder>`
-3) Install dependencies
-    - `npm install`
-4) Start the development server
-    - `npm run dev`
-5) Open the app
-    - Visit http://localhost:3000
+1. Install Node.js
+   - Recommended: Use the official installer from https://nodejs.org or a version manager like nvm.
+2. Clone the repository
+   - `git clone <your-repo-url> && cd <your-project-folder>`
+3. Install dependencies
+   - `npm install`
+4. **Configure environment variables** (IMPORTANT!)
+   - `cp .env.example .env.local`
+   - Edit `.env.local` and set your admin credentials
+   - See [SECURITY.md](./SECURITY.md) for detailed instructions
+5. Start the development server
+   - `npm run dev`
+6. Open the app
+   - Visit http://localhost:3000
 
 ### Windows
 
-1) Install Node.js
-    - Download the Windows installer from https://nodejs.org and follow the prompts.
-2) Clone the repository
-    - PowerShell: `git clone <your-repo-url>; cd <your-project-folder>`
-3) Install dependencies
-    - `npm install`
-4) Start the development server
-    - `npm run dev`
-5) Open the app
-    - Visit http://localhost:3000
+1. Install Node.js
+   - Download the Windows installer from https://nodejs.org and follow the prompts.
+2. Clone the repository
+   - PowerShell: `git clone <your-repo-url>; cd <your-project-folder>`
+3. Install dependencies
+   - `npm install`
+4. **Configure environment variables** (IMPORTANT!)
+   - PowerShell: `copy .env.example .env.local`
+   - CMD: `copy .env.example .env.local`
+   - Edit `.env.local` and set your admin credentials
+   - See [SECURITY.md](./SECURITY.md) for detailed instructions
+5. Start the development server
+   - `npm run dev`
+6. Open the app
+   - Visit http://localhost:3000
 
 ### Common scripts
 
@@ -67,9 +77,6 @@ Check your versions:
 
 - Hot reloading: Edits to files under `app/` will auto-refresh the browser during development.
 - Ports: If port 3000 is in use, set `PORT=3001` (macOS/Linux) or `set PORT=3001` (Windows CMD) or `$env:PORT=3001` (PowerShell) before `npm run dev`.
-
-
-
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
