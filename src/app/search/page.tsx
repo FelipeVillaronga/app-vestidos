@@ -32,6 +32,21 @@ export default function Page() {
   const [items, setItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Available filter options
+  const [availableColors, setAvailableColors] = useState<string[]>([]);
+  const [availableStyles, setAvailableStyles] = useState<string[]>([]);
+
+  // Fetch available filters
+  useEffect(() => {
+    const fetchFilters = async () => {
+      const response = await fetch("/api/items/filters");
+      const data = await response.json();
+      setAvailableColors(data.colors || []);
+      setAvailableStyles(data.styles || []);
+    };
+    fetchFilters();
+  }, []);
+
   // Fetch items from API instead of calling listItems directly
   useEffect(() => {
     const fetchItems = async () => {
@@ -82,7 +97,7 @@ export default function Page() {
         <select
           value={size}
           onChange={(e) => setSize(e.target.value)}
-          className="rounded-xl border px-3 py-2 text-sm"
+          className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm"
         >
           <option value="">All sizes</option>
           <option value="XS">XS</option>
@@ -100,7 +115,7 @@ export default function Page() {
         <select
           value={size}
           onChange={(e) => setSize(e.target.value)}
-          className="rounded-xl border px-3 py-2 text-sm"
+          className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm"
         >
           <option value="">All sizes</option>
           {Array.from({ length: 14 }, (_, i) => i + 35).map((num) => (
@@ -117,7 +132,7 @@ export default function Page() {
       <select
         value={size}
         onChange={(e) => setSize(e.target.value)}
-        className="rounded-xl border px-3 py-2 text-sm"
+        className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm"
       >
         <option value="">All sizes</option>
         <option value="XS">XS</option>
@@ -140,12 +155,12 @@ export default function Page() {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search…"
-          className="rounded-xl border px-3 py-2 text-sm"
+          className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm"
         />
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value as Category | "")}
-          className="rounded-xl border px-3 py-2 text-sm"
+          className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm"
         >
           <option value="">All categories</option>
           <option value="dress">Dresses</option>
@@ -154,18 +169,30 @@ export default function Page() {
           <option value="jacket">Jackets</option>
         </select>
         {renderSizeInput()}
-        <input
+        <select
           value={color}
           onChange={(e) => setColor(e.target.value)}
-          placeholder="Color"
-          className="rounded-xl border px-3 py-2 text-sm"
-        />
-        <input
+          className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm"
+        >
+          <option value="">All colors</option>
+          {availableColors.map((c) => (
+            <option key={c} value={c}>
+              {c.charAt(0).toUpperCase() + c.slice(1)}
+            </option>
+          ))}
+        </select>
+        <select
           value={style}
           onChange={(e) => setStyle(e.target.value)}
-          placeholder="Style (e.g., cocktail)"
-          className="rounded-xl border px-3 py-2 text-sm"
-        />
+          className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm"
+        >
+          <option value="">All styles</option>
+          {availableStyles.map((s) => (
+            <option key={s} value={s}>
+              {s.charAt(0).toUpperCase() + s.slice(1)}
+            </option>
+          ))}
+        </select>
         <button
           type="submit"
           className="rounded-xl bg-fuchsia-600 text-white px-4 py-2 text-sm"

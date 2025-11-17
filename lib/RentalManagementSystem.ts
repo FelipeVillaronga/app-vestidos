@@ -172,3 +172,19 @@ export function addItem(itemData: Omit<Item, "id">) {
   items.push(newItem);
   return { item: newItem };
 }
+
+export function getUniqueColors() {
+  const colors = new Set<string>();
+  items.forEach((item) => {
+    if (item.color) colors.add(item.color);
+  });
+  return Array.from(colors).sort();
+}
+
+export function getUniqueStyles() {
+  const styles = new Set<string>();
+  items.forEach((item) => {
+    if (item.style) styles.add(item.style);
+  });
+  return Array.from(styles).sort();
+}
