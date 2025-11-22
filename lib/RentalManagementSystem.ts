@@ -5,7 +5,7 @@ export type Item = {
   name: string;
   category: Category;
   pricePerDay: number;
-  sizes: string[]; // for shoes you can use "36-41"
+  sizes: string[];
   color: string;
   style?: string;
   description: string;
@@ -23,7 +23,6 @@ export type Rental = {
   status: "active" | "canceled";
 };
 
-// In-memory store for demo. Replace with a DB in production.
 const initialItems: Item[] = [
   {
     id: 1,
@@ -75,7 +74,6 @@ const initialItems: Item[] = [
   },
 ];
 
-// Use globalThis to persist data across hot reloads in development
 declare global {
   var _items: Item[] | undefined;
   var _rentals: Rental[] | undefined;
@@ -160,7 +158,6 @@ export function updateItem(id: number, updates: Partial<Omit<Item, "id">>) {
 }
 
 export function addItem(itemData: Omit<Item, "id">) {
-  // Generar un nuevo ID (el máximo ID actual + 1)
   const maxId = items.length > 0 ? Math.max(...items.map((i) => i.id)) : 0;
   const newId = maxId + 1;
 

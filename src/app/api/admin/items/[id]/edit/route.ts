@@ -19,7 +19,6 @@ export async function POST(
     const body = await req.json();
     const { name, category, pricePerDay, sizes, color, style, description, images, alt } = body;
 
-    // Validaciones básicas
     if (name !== undefined && (!name || typeof name !== "string")) {
         return NextResponse.json({ error: "Invalid name" }, { status: 400 });
     }
@@ -32,7 +31,6 @@ export async function POST(
         return NextResponse.json({ error: "Invalid sizes" }, { status: 400 });
     }
 
-    // Construir objeto de actualizaciones solo con campos definidos
     const updates: Record<string, unknown> = {};
     if (name !== undefined) updates.name = name;
     if (category !== undefined) updates.category = category;

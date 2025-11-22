@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { listItems, type Category } from "../../../../lib/RentalManagementSystem";
 
-// Disable caching for this API route
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
