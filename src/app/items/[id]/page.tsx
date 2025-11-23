@@ -90,7 +90,7 @@ export default async function ItemDetail({
             <form
               action="/api/rentals"
               method="POST"
-              className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded-2xl border p-4"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4"
             >
               <input type="hidden" name="itemId" value={id} />
               <input type="hidden" name="csrf" value={csrf} />
@@ -103,7 +103,7 @@ export default async function ItemDetail({
                   name="name"
                   required
                   placeholder="Full name"
-                  className="w-full rounded-xl border px-4 py-3 text-sm"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm focus:ring-2 focus:ring-fuchsia-500 outline-none"
                 />
               </div>
               <div>
@@ -116,7 +116,7 @@ export default async function ItemDetail({
                   type="email"
                   required
                   placeholder="Email"
-                  className="w-full rounded-xl border px-4 py-3 text-sm"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm focus:ring-2 focus:ring-fuchsia-500 outline-none"
                 />
               </div>
               <div>
@@ -128,31 +128,37 @@ export default async function ItemDetail({
                   name="phone"
                   required
                   placeholder="Phone"
-                  className="w-full rounded-xl border px-4 py-3 text-sm"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm focus:ring-2 focus:ring-fuchsia-500 outline-none"
                 />
               </div>
               <div>
-                <label className="sr-only" htmlFor="start">
-                  Start date
+                <label
+                  htmlFor="start"
+                  className="block text-xs font-medium mb-1 text-slate-600 dark:text-slate-400"
+                >
+                  From (Start date)
                 </label>
                 <input
                   id="start"
                   name="start"
                   type="date"
                   required
-                  className="w-full rounded-xl border px-4 py-3 text-sm"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm focus:ring-2 focus:ring-fuchsia-500 outline-none [color-scheme:light] dark:[color-scheme:dark]"
                 />
               </div>
               <div>
-                <label className="sr-only" htmlFor="end">
-                  End date
+                <label
+                  htmlFor="end"
+                  className="block text-xs font-medium mb-1 text-slate-600 dark:text-slate-400"
+                >
+                  To (End date)
                 </label>
                 <input
                   id="end"
                   name="end"
                   type="date"
                   required
-                  className="w-full rounded-xl border px-4 py-3 text-sm"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm focus:ring-2 focus:ring-fuchsia-500 outline-none [color-scheme:light] dark:[color-scheme:dark]"
                 />
               </div>
               <div className="sm:col-span-2">

@@ -75,26 +75,32 @@ export default async function Home() {
                     className="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-fuchsia-500"
                   />
                 </div>
-                <div>
-                  <label htmlFor="start" className="sr-only">
-                    Start date
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="start"
+                    className="text-xs font-medium mb-1 text-slate-600 dark:text-slate-300 px-1"
+                  >
+                    From
                   </label>
                   <input
                     id="start"
                     name="start"
                     type="date"
-                    className="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-fuchsia-500"
+                    className="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-fuchsia-500 [color-scheme:light] dark:[color-scheme:dark]"
                   />
                 </div>
-                <div>
-                  <label htmlFor="end" className="sr-only">
-                    End date
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="end"
+                    className="text-xs font-medium mb-1 text-slate-600 dark:text-slate-300 px-1"
+                  >
+                    To
                   </label>
                   <input
                     id="end"
                     name="end"
                     type="date"
-                    className="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-fuchsia-500"
+                    className="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-fuchsia-500 [color-scheme:light] dark:[color-scheme:dark]"
                   />
                 </div>
                 <div>
