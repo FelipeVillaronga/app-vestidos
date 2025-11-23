@@ -75,10 +75,10 @@ export default async function Home() {
                     className="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-fuchsia-500"
                   />
                 </div>
-                <div className="flex flex-col">
+                <div className="relative">
                   <label
                     htmlFor="start"
-                    className="text-xs font-medium mb-1 text-slate-600 dark:text-slate-300 px-1"
+                    className="absolute -top-4 left-1 text-[10px] font-medium text-slate-500 dark:text-slate-400"
                   >
                     From
                   </label>
@@ -89,10 +89,10 @@ export default async function Home() {
                     className="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-fuchsia-500 [color-scheme:light] dark:[color-scheme:dark]"
                   />
                 </div>
-                <div className="flex flex-col">
+                <div className="relative">
                   <label
                     htmlFor="end"
-                    className="text-xs font-medium mb-1 text-slate-600 dark:text-slate-300 px-1"
+                    className="absolute -top-4 left-1 text-[10px] font-medium text-slate-500 dark:text-slate-400"
                   >
                     To
                   </label>
