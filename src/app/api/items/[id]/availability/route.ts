@@ -5,8 +5,9 @@ import { getItem, getItemRentals } from "@/lib/RentalManagementSystem";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export function GET(_: Request, { params }: { params: { id: string } }) {
-  const id = Number(params.id);
+export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id: idParam } = await params;
+  const id = Number(idParam);
   const item = getItem(id);
   if (!item) return NextResponse.json({ error: "Not found" }, { status: 404 });
 

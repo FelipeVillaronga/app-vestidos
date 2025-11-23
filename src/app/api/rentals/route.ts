@@ -31,7 +31,9 @@ export async function POST(req: Request) {
   if (end < start) return NextResponse.json({ error: "End date must be after start date" }, { status: 400 });
 
   if (!isItemAvailable(itemId, start, end)) {
-    return NextResponse.json({ error: "Item not available for selected dates" }, { status: 409 });
+    // Redirect back with unavailable message instead of error
+    const res = NextResponse.redirect(new URL(`/items/${itemId}?unavailable=1`, req.url));
+    return res;
   }
 
   const { rental, error } = createRental({
@@ -41,7 +43,11 @@ export async function POST(req: Request) {
     customer: { name, email, phone },
   });
 
-  if (error) return NextResponse.json({ error }, { status: 409 });
+  if (error) {
+    // Redirect back with error message
+    const res = NextResponse.redirect(new URL(`/items/${itemId}?error=1`, req.url));
+    return res;
+  }
 
   // Redirect back to item page with a success message
   const res = NextResponse.redirect(new URL(`/items/${itemId}?success=1`, req.url));

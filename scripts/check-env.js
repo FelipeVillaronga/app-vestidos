@@ -1,9 +1,24 @@
 #!/usr/bin/env node
 
-/**
- * Environment Variables Verification Script
- * Run this before starting the server to ensure all required env vars are set
- */
+const fs = require('fs');
+const path = require('path');
+
+const envLocalPath = path.join(__dirname, '..', '.env.local');
+if (fs.existsSync(envLocalPath)) {
+    const envContent = fs.readFileSync(envLocalPath, 'utf8');
+    envContent.split('\n').forEach(line => {
+        line = line.trim();
+        if (!line || line.startsWith('#')) return;
+        
+        const [key, ...valueParts] = line.split('=');
+        const value = valueParts.join('=').trim();
+        
+        if (key && value) {
+            process.env[key.trim()] = value;
+        }
+    });
+    console.log('📄 Loaded .env.local file\n');
+}
 
 const requiredEnvVars = [
     'ADMIN_USERNAME',
@@ -23,7 +38,6 @@ requiredEnvVars.forEach(varName => {
     } else {
         console.log(`✅ ${varName} is set`);
 
-        // Check for weak passwords
         if (varName === 'ADMIN_PASSWORD') {
             if (value.length < 8) {
                 warnings.push('⚠️  Password is less than 8 characters');
@@ -33,7 +47,6 @@ requiredEnvVars.forEach(varName => {
             }
         }
 
-        // Check for default username
         if (varName === 'ADMIN_USERNAME' && value === 'admin') {
             warnings.push('⚠️  Using default username "admin" - consider changing it');
         }

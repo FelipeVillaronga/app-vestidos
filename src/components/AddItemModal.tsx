@@ -58,9 +58,8 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Artículo agregado correctamente");
+        alert("Item added successfully");
         setIsOpen(false);
-        // Resetear formulario
         setFormData({
           name: "",
           category: "dress",
@@ -72,16 +71,15 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
           images: "",
           alt: "",
         });
-        // Force a hard reload by adding a timestamp
         window.location.href = window.location.pathname + "?t=" + Date.now();
       } else {
         alert(
-          "Error al agregar el artículo: " + (data.error || "Unknown error")
+          "Error adding item: " + (data.error || "Unknown error")
         );
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Error al agregar el artículo");
+      alert("Error adding item");
     } finally {
       setIsLoading(false);
     }
@@ -91,9 +89,10 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="rounded-lg bg-green-600 text-white px-4 py-2 hover:bg-green-700"
+        className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-600 to-rose-500 text-white px-5 py-2.5 text-sm font-semibold hover:from-fuchsia-500 hover:to-rose-400 transition-all duration-300 shadow-lg hover:shadow-xl"
       >
-        + Agregar Artículo
+        <span>➕</span>
+        <span>Add Item</span>
       </button>
 
       {isOpen && (
@@ -107,7 +106,7 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
           >
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold">Agregar Nuevo Artículo</h2>
+                <h2 className="text-xl font-bold">Add New Item</h2>
                 <button
                   onClick={() => setIsOpen(false)}
                   disabled={isLoading}
@@ -120,7 +119,7 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium mb-1">
-                    Nombre <span className="text-red-500">*</span>
+                    Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -130,13 +129,13 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
                     }
                     required
                     className="w-full px-3 py-2 border rounded-lg dark:bg-slate-800 dark:border-slate-700"
-                    placeholder="Ej: Vestido de Noche Elegante"
+                    placeholder="E.g: Elegant Evening Dress"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium mb-1">
-                    Categoría <span className="text-red-500">*</span>
+                    Category <span className="text-red-500">*</span>
                   </label>
                   <select
                     value={formData.category}
@@ -155,7 +154,7 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
 
                 <div>
                   <label className="block text-sm font-medium mb-1">
-                    Precio por día ($) <span className="text-red-500">*</span>
+                    Price per day ($) <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="number"
@@ -170,13 +169,13 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
                     min="1"
                     step="0.01"
                     className="w-full px-3 py-2 border rounded-lg dark:bg-slate-800 dark:border-slate-700"
-                    placeholder="Ej: 79"
+                    placeholder="E.g: 79"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium mb-1">
-                    Tallas (separadas por coma){" "}
+                    Sizes (comma separated){" "}
                     <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -202,14 +201,14 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
                       setFormData({ ...formData, color: e.target.value })
                     }
                     required
-                    placeholder="Ej: champagne, black, red"
+                    placeholder="E.g: champagne, black, red"
                     className="w-full px-3 py-2 border rounded-lg dark:bg-slate-800 dark:border-slate-700"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium mb-1">
-                    Estilo (opcional)
+                    Style (optional)
                   </label>
                   <input
                     type="text"
@@ -224,7 +223,7 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
 
                 <div>
                   <label className="block text-sm font-medium mb-1">
-                    Descripción <span className="text-red-500">*</span>
+                    Description <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     value={formData.description}
@@ -233,14 +232,14 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
                     }
                     required
                     rows={3}
-                    placeholder="Describe el artículo..."
+                    placeholder="Describe the item..."
                     className="w-full px-3 py-2 border rounded-lg dark:bg-slate-800 dark:border-slate-700"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium mb-1">
-                    Imágenes (URLs separadas por coma, opcional)
+                    Images (comma-separated URLs, optional)
                   </label>
                   <input
                     type="text"
@@ -252,13 +251,13 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
                     className="w-full px-3 py-2 border rounded-lg dark:bg-slate-800 dark:border-slate-700"
                   />
                   <p className="text-xs text-slate-500 mt-1">
-                    Si no se especifica, se usará una imagen por defecto
+                    If not specified, a default image will be used
                   </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium mb-1">
-                    Texto alternativo (alt, opcional)
+                    Alternative text (alt, optional)
                   </label>
                   <input
                     type="text"
@@ -266,7 +265,7 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
                     onChange={(e) =>
                       setFormData({ ...formData, alt: e.target.value })
                     }
-                    placeholder="Descripción para accesibilidad"
+                    placeholder="Description for accessibility"
                     className="w-full px-3 py-2 border rounded-lg dark:bg-slate-800 dark:border-slate-700"
                   />
                 </div>
@@ -275,17 +274,17 @@ export default function AddItemModal({ csrf }: AddItemModalProps) {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 rounded-xl bg-gradient-to-r from-fuchsia-600 to-rose-500 text-white px-4 py-3 text-sm font-semibold hover:from-fuchsia-500 hover:to-rose-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl"
                   >
-                    {isLoading ? "Guardando..." : "Guardar Artículo"}
+                    {isLoading ? "Saving..." : "Save item"}
                   </button>
                   <button
                     type="button"
                     onClick={() => setIsOpen(false)}
                     disabled={isLoading}
-                    className="flex-1 border px-4 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50"
+                    className="flex-1 rounded-xl border-2 border-slate-200 dark:border-slate-700 px-4 py-3 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 transition-all"
                   >
-                    Cancelar
+                    Cancel
                   </button>
                 </div>
               </form>
