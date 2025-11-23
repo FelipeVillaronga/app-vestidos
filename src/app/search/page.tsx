@@ -22,6 +22,7 @@ export default function Page() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  // Local filter state - changes don't trigger search until button is clicked
   const [q, setQ] = useState(searchParams.get("q") || "");
   const [category, setCategory] = useState<Category | "">(
     (searchParams.get("category") as Category) || ""
@@ -31,6 +32,15 @@ export default function Page() {
   const [style, setStyle] = useState(searchParams.get("style") || "");
   const [items, setItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Sync local state with URL params when they change (e.g., back/forward navigation)
+  useEffect(() => {
+    setQ(searchParams.get("q") || "");
+    setCategory((searchParams.get("category") as Category) || "");
+    setSize(searchParams.get("size") || "");
+    setColor(searchParams.get("color") || "");
+    setStyle(searchParams.get("style") || "");
+  }, [searchParams]);
 
   // Available filter options
   const [availableColors, setAvailableColors] = useState<string[]>([]);
@@ -47,16 +57,11 @@ export default function Page() {
     fetchFilters();
   }, []);
 
-  // Fetch items from API instead of calling listItems directly
+  // Fetch items from API only on initial load based on URL params
   useEffect(() => {
     const fetchItems = async () => {
       setIsLoading(true);
-      const params = new URLSearchParams();
-      if (q) params.set("q", q);
-      if (category) params.set("category", category);
-      if (size) params.set("size", size);
-      if (color) params.set("color", color);
-      if (style) params.set("style", style);
+      const params = new URLSearchParams(searchParams.toString());
 
       const response = await fetch(`/api/items?${params.toString()}`);
       const data = await response.json();
@@ -65,7 +70,7 @@ export default function Page() {
     };
 
     fetchItems();
-  }, [q, category, size, color, style]);
+  }, [searchParams]);
 
   // Reset size when category changes to avoid invalid combinations
   useEffect(() => {
