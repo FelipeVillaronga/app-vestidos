@@ -10,6 +10,24 @@ function toISO(d: Date) {
   return d.toISOString().slice(0, 10);
 }
 
+function formatDate(d: Date): string {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  return `${months[d.getMonth()]} ${d.getDate()}`;
+}
+
 export default function ItemCalendar({ itemId }: Props) {
   const [busy, setBusy] = useState<Range[]>([]);
 
@@ -42,10 +60,12 @@ export default function ItemCalendar({ itemId }: Props) {
             key={d.toISOString()}
             title={toISO(d)}
             className={`text-center text-xs rounded-md px-2 py-3 ${
-              booked ? "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-200" : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-100"
+              booked
+                ? "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-200"
+                : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-100"
             }`}
           >
-            {d.toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+            {formatDate(d)}
             {booked && <div className="mt-1">Booked</div>}
           </div>
         );
