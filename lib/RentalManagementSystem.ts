@@ -23,6 +23,12 @@ export type Rental = {
   status: "active" | "canceled";
 };
 
+export type NewsletterSubscription = {
+  id: string;
+  email: string;
+  subscribedAt: string;
+};
+
 const initialItems: Item[] = [
   {
     id: 1,
@@ -77,6 +83,7 @@ const initialItems: Item[] = [
 declare global {
   var _items: Item[] | undefined;
   var _rentals: Rental[] | undefined;
+  var _newsletterSubscriptions: NewsletterSubscription[] | undefined;
 }
 
 const items: Item[] = globalThis._items || [...initialItems];
@@ -84,6 +91,9 @@ globalThis._items = items;
 
 const rentals: Rental[] = globalThis._rentals || [];
 globalThis._rentals = rentals;
+
+const newsletterSubscriptions: NewsletterSubscription[] = globalThis._newsletterSubscriptions || [];
+globalThis._newsletterSubscriptions = newsletterSubscriptions;
 
 export function listItems(filters?: {
   q?: string;
@@ -184,4 +194,32 @@ export function getUniqueStyles() {
     if (item.style) styles.add(item.style);
   });
   return Array.from(styles).sort();
+}
+
+export function subscribeToNewsletter(email: string) {
+  const normalizedEmail = email.toLowerCase().trim();
+  
+  // Check if email already exists
+  const existing = newsletterSubscriptions.find(
+    (sub) => sub.email.toLowerCase() === normalizedEmail
+  );
+  
+  if (existing) {
+    return { error: "Email already subscribed" as const };
+  }
+  
+  const subscription: NewsletterSubscription = {
+    id: crypto.randomUUID(),
+    email: normalizedEmail,
+    subscribedAt: new Date().toISOString(),
+  };
+  
+  newsletterSubscriptions.push(subscription);
+  return { subscription };
+}
+
+export function listNewsletterSubscriptions() {
+  return newsletterSubscriptions.slice().sort((a, b) => 
+    b.subscribedAt.localeCompare(a.subscribedAt)
+  );
 }

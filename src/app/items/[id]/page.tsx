@@ -8,6 +8,7 @@ import ItemCalendar from "./ItemCalendar";
 import { getOrCreateCsrfToken } from "../../../../lib/CsrfSessionManagement";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import { Key } from "react";
+import RentalMessages from "./RentalMessages";
 
 // Disable caching to always show fresh data
 export const dynamic = "force-dynamic";
@@ -30,6 +31,7 @@ export default async function ItemDetail({
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 min-h-[calc(100vh-8rem)]">
+      <RentalMessages />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div>
           <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800">

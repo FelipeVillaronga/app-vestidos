@@ -33,7 +33,7 @@ export default function EditItemModal({ item, csrf }: EditItemModalProps) {
     e.preventDefault();
     setIsLoading(true);
 
-    if (!confirm("¿Estás seguro de que quieres actualizar este vestido?")) {
+    if (!confirm("Are you sure you want to update this item?")) {
       setIsLoading(false);
       return;
     }
@@ -64,18 +64,18 @@ export default function EditItemModal({ item, csrf }: EditItemModalProps) {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Artículo actualizado correctamente");
+        alert("Item updated successfully");
         setIsOpen(false);
         // Force a hard reload by adding a timestamp
         window.location.href = window.location.pathname + "?t=" + Date.now();
       } else {
         alert(
-          "Error al actualizar el vestido: " + (data.error || "Unknown error")
+          "Error updating item: " + (data.error || "Unknown error")
         );
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Error al actualizar el vestido");
+      alert("Error updating item");
     } finally {
       setIsLoading(false);
     }
@@ -85,9 +85,10 @@ export default function EditItemModal({ item, csrf }: EditItemModalProps) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="rounded-lg border px-3 py-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950"
+        className="inline-flex items-center gap-1.5 rounded-lg border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/30 px-3 py-1.5 text-xs font-semibold text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 hover:border-blue-300 dark:hover:border-blue-700 transition-all"
       >
-        Edit
+        <span>✏️</span>
+        <span>Edit</span>
       </button>
     );
   }
@@ -96,9 +97,10 @@ export default function EditItemModal({ item, csrf }: EditItemModalProps) {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="rounded-lg border px-3 py-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950"
+        className="inline-flex items-center gap-1.5 rounded-lg border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/30 px-3 py-1.5 text-xs font-semibold text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 hover:border-blue-300 dark:hover:border-blue-700 transition-all"
       >
-        Edit
+        <span>✏️</span>
+        <span>Edit</span>
       </button>
 
       {/* Modal Overlay */}
@@ -112,7 +114,7 @@ export default function EditItemModal({ item, csrf }: EditItemModalProps) {
         >
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold">Editar Artículo</h2>
+              <h2 className="text-xl font-bold">Edit Item</h2>
               <button
                 onClick={() => setIsOpen(false)}
                 disabled={isLoading}
@@ -124,7 +126,7 @@ export default function EditItemModal({ item, csrf }: EditItemModalProps) {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Nombre</label>
+                <label className="block text-sm font-medium mb-1">Name</label>
                 <input
                   type="text"
                   value={formData.name}
@@ -138,7 +140,7 @@ export default function EditItemModal({ item, csrf }: EditItemModalProps) {
 
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Categoría
+                  Category
                 </label>
                 <select
                   value={formData.category}
@@ -157,7 +159,7 @@ export default function EditItemModal({ item, csrf }: EditItemModalProps) {
 
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Precio por día ($)
+                  Price per day ($)
                 </label>
                 <input
                   type="number"
@@ -176,7 +178,7 @@ export default function EditItemModal({ item, csrf }: EditItemModalProps) {
 
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Tallas (separadas por coma)
+                  Sizes (comma separated)
                 </label>
                 <input
                   type="text"
@@ -205,7 +207,7 @@ export default function EditItemModal({ item, csrf }: EditItemModalProps) {
 
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Estilo (opcional)
+                  Style (optional)
                 </label>
                 <input
                   type="text"
@@ -220,7 +222,7 @@ export default function EditItemModal({ item, csrf }: EditItemModalProps) {
 
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Descripción
+                  Description
                 </label>
                 <textarea
                   value={formData.description}
@@ -237,17 +239,17 @@ export default function EditItemModal({ item, csrf }: EditItemModalProps) {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white px-4 py-3 text-sm font-semibold hover:from-blue-500 hover:to-blue-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl"
                 >
-                  {isLoading ? "Guardando..." : "Guardar Cambios"}
+                  {isLoading ? "Saving..." : "Confirm changes"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
                   disabled={isLoading}
-                  className="flex-1 border px-4 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50"
+                  className="flex-1 rounded-xl border-2 border-slate-200 dark:border-slate-700 px-4 py-3 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 transition-all"
                 >
-                  Cancelar
+                  Cancel
                 </button>
               </div>
             </form>
