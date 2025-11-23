@@ -27,7 +27,7 @@ export default async function Page() {
   const rentals = listRentals();
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 min-h-[calc(100vh-8rem)]">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Admin dashboard</h1>
         <form action="/api/admin/logout" method="POST">

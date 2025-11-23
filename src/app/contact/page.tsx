@@ -43,7 +43,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
+    <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12 min-h-[calc(100vh-8rem)]">
       <h1 className="text-2xl sm:text-3xl font-bold">
         Contact GlamRent Support
       </h1>
