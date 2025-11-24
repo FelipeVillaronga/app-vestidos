@@ -29,6 +29,18 @@ export type NewsletterSubscription = {
   subscribedAt: string;
 };
 
+export type LenderApplication = {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  itemTypes: string;
+  approximateQuantity: number;
+  message?: string;
+  status: "pending" | "approved" | "rejected";
+  createdAt: string;
+};
+
 const initialItems: Item[] = [
   {
     id: 1,
@@ -84,6 +96,7 @@ declare global {
   var _items: Item[] | undefined;
   var _rentals: Rental[] | undefined;
   var _newsletterSubscriptions: NewsletterSubscription[] | undefined;
+  var _lenderApplications: LenderApplication[] | undefined;
 }
 
 const items: Item[] = globalThis._items || [...initialItems];
@@ -94,6 +107,9 @@ globalThis._rentals = rentals;
 
 const newsletterSubscriptions: NewsletterSubscription[] = globalThis._newsletterSubscriptions || [];
 globalThis._newsletterSubscriptions = newsletterSubscriptions;
+
+const lenderApplications: LenderApplication[] = globalThis._lenderApplications || [];
+globalThis._lenderApplications = lenderApplications;
 
 export function listItems(filters?: {
   q?: string;
@@ -222,4 +238,33 @@ export function listNewsletterSubscriptions() {
   return newsletterSubscriptions.slice().sort((a, b) => 
     b.subscribedAt.localeCompare(a.subscribedAt)
   );
+}
+
+export function createLenderApplication(data: Omit<LenderApplication, "id" | "createdAt" | "status">) {
+  const application: LenderApplication = {
+    ...data,
+    id: crypto.randomUUID(),
+    status: "pending",
+    createdAt: new Date().toISOString(),
+  };
+  
+  lenderApplications.push(application);
+  return { application };
+}
+
+export function listLenderApplications() {
+  return lenderApplications.slice().sort((a, b) => 
+    b.createdAt.localeCompare(a.createdAt)
+  );
+}
+
+export function getLenderApplication(id: string) {
+  return lenderApplications.find((app) => app.id === id) ?? null;
+}
+
+export function updateLenderApplicationStatus(id: string, status: "approved" | "rejected") {
+  const app = lenderApplications.find((a) => a.id === id);
+  if (!app) return { error: "Not found" as const };
+  app.status = status;
+  return { application: app };
 }
