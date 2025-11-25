@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import DeleteItemButton from "@/src/components/DeleteItemButton";
 import EditItemModal from "@/src/components/EditItemModal";
 import AddItemModal from "@/src/components/AddItemModal";
+import RentalStatusMessage from "@/src/components/RentalStatusMessage";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -29,6 +30,9 @@ export default async function Page() {
 
   return (
     <div className="min-h-[calc(100vh-8rem)] bg-slate-50 dark:bg-slate-950">
+      {/* Success/Error Messages */}
+      <RentalStatusMessage />
+      
       {/* Header */}
       <div className="bg-gradient-to-br from-fuchsia-50 via-rose-50 to-orange-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border-b border-slate-200 dark:border-slate-800">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
