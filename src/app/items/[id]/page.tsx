@@ -10,7 +10,6 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import { Key } from "react";
 import RentalMessages from "./RentalMessages";
 
-// Disable caching to always show fresh data
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -24,7 +23,6 @@ export default async function ItemDetail({
   const item = getItem(id);
   if (!item) return notFound();
 
-  // Generate CSRF token; cookie will be set if missing
   const csrf = await getOrCreateCsrfToken();
 
   const booked = await getItemRentals(id);
