@@ -8,7 +8,7 @@ export class AdminDashboardPage {
 
     constructor(page: Page) {
         this.page = page;
-        this.dashboardHeading = page.getByRole('heading', { name: 'Admin dashboard' });
+        this.dashboardHeading = page.getByRole('heading', { name: 'Admin Dashboard' });
         this.signOutButton = page.getByRole('button', { name: 'Sign out' });
         this.inventoryHeaderSection = page.locator('#table-header');
     }

@@ -10,15 +10,15 @@ export const test = base.extend<{ loggedInPage: Page }>({
     await page.getByRole('link', { name: 'Admin' }).click();
 
     // Se asegura de que la pagina de admin haya rendereado antes de continuar
-    await baseExpect(page.getByRole('heading', { name: 'Admin sign in' })).toBeVisible();
+    await baseExpect(page.getByRole('heading', { name: 'Admin Portal' })).toBeVisible();
     // login propiamente dicho
     await page.getByRole('textbox', { name: 'Username' }).fill(testUsers.admin.username);
     await page.getByRole('textbox', { name: 'Password' }).fill(testUsers.admin.password);
-    await page.getByRole('button', { name: 'Sign in' }).click();
+    await page.getByRole('button', { name: /sign in/i }).click();
 
     // Espera el dashboard una vez que se logueó
     await page.waitForURL('**/admin*', { waitUntil: 'networkidle' });
-    await baseExpect(page.getByRole('heading', { name: 'Admin dashboard' })).toBeVisible();
+    await baseExpect(page.getByRole('heading', { name: 'Admin Dashboard' })).toBeVisible();
 
     // Devuelve la página con user logueado
     await provide(page);
