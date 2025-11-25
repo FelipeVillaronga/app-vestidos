@@ -22,7 +22,7 @@ export class AdminDashboardPage {
         await expect(this.inventoryHeaderSection).toBeVisible();
         for (const header of headers) {
             await expect(
-                this.inventoryHeaderSection.getByRole('cell', { name: header, exact: true })
+                this.inventoryHeaderSection.getByRole('columnheader', { name: header, exact: true })
             ).toBeVisible();
         }
     }
