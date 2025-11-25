@@ -11,8 +11,8 @@ export class LoginPage {
         this.page = page;
         this.usernameInput = page.getByRole('textbox', { name: 'Username' });
         this.passwordInput = page.getByRole('textbox', { name: 'Password' });
-        this.signInButton = page.getByRole('button', { name: 'Sign in' });
-        this.adminSignInHeading = page.getByRole('heading', { name: 'Admin sign in' });
+        this.signInButton = page.getByRole('button', { name: /sign in/i });
+        this.adminSignInHeading = page.getByRole('heading', { name: 'Admin Portal' });
     }
 
     async login(username: string, password: string) {

@@ -4,7 +4,9 @@ import { appUrls } from './testData/urls';
 test.describe('CT-RF-002-01 - Item detail', () => {
     test('muestra imágenes y calendario de disponibilidad', async ({ page }) => {
         await page.goto(`${appUrls.home}items/1`);
-        await expect(page.getByRole('heading', { name: 'Silk Evening Gown' })).toBeVisible();
+        // Asegurarse que la página terminó de cargar recursos dinámicos
+        await page.waitForLoadState('networkidle');
+        await expect(page.getByRole('heading', { name: 'Silk Evening Gown' })).toBeVisible({ timeout: 10000 });
         await expect(page.getByRole('heading', { name: 'Availability' })).toBeVisible();
         await expect(page.locator('img[alt="Model wearing a champagne silk evening gown"]')).toBeVisible();
         const todayIso = new Date().toISOString().slice(0, 10);
