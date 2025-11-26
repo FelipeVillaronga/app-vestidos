@@ -1,4 +1,6 @@
 import { Page } from '@playwright/test';
+import { getCsrfToken } from './apiHelpers';
+import { getDateString, createDateRange } from './dateHelpers';
 
 /**
  * Creates a rental via API for testing purposes
@@ -16,21 +18,13 @@ export async function createTestRental(
         email: 'test@example.com',
         phone: '+1234567890'
     },
-    dates: { start: string; end: string } = {
-        start: getDateString(7),  // 7 days from now
-        end: getDateString(10)    // 10 days from now
-    }
+    dates: { start: string; end: string } = createDateRange(7, 3)
 ) {
     // Navigate to the item page to get CSRF token
     await page.goto(`http://localhost:3000/items/${itemId}`);
     
     // Extract CSRF token from the page
-    const csrfInput = page.locator('input[name="csrf"]').first();
-    const csrf = await csrfInput.getAttribute('value');
-    
-    if (!csrf) {
-        throw new Error('CSRF token not found on page');
-    }
+    const csrf = await getCsrfToken(page);
     
     // Create rental via API
     const response = await page.request.post('http://localhost:3000/api/rentals', {
@@ -46,17 +40,6 @@ export async function createTestRental(
     });
     
     return response;
-}
-
-/**
- * Gets a date string in YYYY-MM-DD format
- * @param daysFromNow - Number of days from today
- * @returns Date string in YYYY-MM-DD format
- */
-export function getDateString(daysFromNow: number = 0): string {
-    const date = new Date();
-    date.setDate(date.getDate() + daysFromNow);
-    return date.toISOString().split('T')[0];
 }
 
 /**

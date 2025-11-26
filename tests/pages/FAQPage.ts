@@ -1,16 +1,20 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { BasePage } from './BasePage';
 
-export class FAQPage {
-    readonly page: Page;
+export class FAQPage extends BasePage {
     readonly mainHeading: Locator;
     readonly faqQuestions: Locator;
     readonly contactUsButton: Locator;
 
     constructor(page: Page) {
-        this.page = page;
+        super(page);
         this.mainHeading = page.getByRole('heading', { name: 'Frequently Asked Questions', level: 1 });
         this.faqQuestions = page.getByRole('heading', { level: 2 });
         this.contactUsButton = page.getByRole('link', { name: 'Contact Us' });
+    }
+
+    async goto() {
+        await super.goto('faq');
     }
 
     async expectPageVisible() {

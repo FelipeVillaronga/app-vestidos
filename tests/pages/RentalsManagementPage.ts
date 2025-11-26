@@ -1,13 +1,13 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { BasePage } from './BasePage';
 
-export class RentalsManagementPage {
-    readonly page: Page;
+export class RentalsManagementPage extends BasePage {
     readonly rentalsSection: Locator;
     readonly rentalsHeading: Locator;
     readonly rentalsTable: Locator;
 
     constructor(page: Page) {
-        this.page = page;
+        super(page);
         this.rentalsHeading = page.getByRole('heading', { name: 'Scheduled Rentals' });
         this.rentalsSection = page.locator('section').filter({ has: this.rentalsHeading });
         this.rentalsTable = this.rentalsSection.locator('table');

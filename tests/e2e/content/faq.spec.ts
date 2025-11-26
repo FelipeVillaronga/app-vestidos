@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { appUrls } from './testData/urls';
-import { HomePage } from './pages/HomePage';
-import { FAQPage } from './pages/FAQPage';
+import { HomePage } from '../../pages/HomePage';
+import { FAQPage } from '../../pages/FAQPage';
 
 test.describe('CT-RF-008-01: FAQ Visualization', () => {
     test('given_UserOnHomePage__when_NavigatesToFAQ__then_PageLoadsAndQuestionsAreVisible', async ({ page }) => {
@@ -34,3 +33,4 @@ test.describe('CT-RF-008-01: FAQ Visualization', () => {
         await faqPage.expectAnswerVisible('The standard rental period is 3 days');
     });
 });
+
