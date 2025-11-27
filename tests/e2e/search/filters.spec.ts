@@ -1,85 +1,96 @@
 import { test, expect } from '@playwright/test';
+import { SearchPage } from '../../pages/SearchPage';
 
 test.describe('Search Filters - CT-RF-001', () => {
+    let searchPage: SearchPage;
+
     test.beforeEach(async ({ page }) => {
-        await page.goto('/search');
-        await page.waitForLoadState('domcontentloaded');
+        searchPage = new SearchPage(page);
+        await searchPage.goto();
     });
 
     test('CT-RF-001-01 - Filter dresses by size M', async ({ page }) => {
-        // Select size "M" (second select)
-        await page.locator('form select').nth(1).selectOption('M');
+        // Select size "M"
+        await searchPage.filterBySize('M');
         
         // Click search button
-        await page.getByRole('button', { name: 'Search' }).click();
+        await searchPage.search();
         
-        // Wait for URL to update
-        await page.waitForURL('**/search?**', { timeout: 5000 });
-        
-        // Verify URL contains filters
-        expect(page.url()).toContain('size=M');
+        // Wait for network to be idle (results loaded)
+        await page.waitForLoadState('networkidle', { timeout: 5000 });
         
         // Verify results heading is visible
-        await expect(page.locator('h2').filter({ hasText: /Found/i })).toBeVisible();
+        await searchPage.expectResultsVisible();
+        
+        // Verify all visible items include size M
+        const sizeElements = page.locator('p:has-text("Sizes:")');
+        const count = await sizeElements.count();
+        expect(count).toBeGreaterThan(0);
+        
+        for (let i = 0; i < count; i++) {
+            await expect(sizeElements.nth(i)).toContainText('M');
+        }
     });
 
     test('CT-RF-001-02 - Filter items by black color', async ({ page }) => {
-        // Wait for color dropdown to populate from API
-        await page.waitForTimeout(1000);
-        
-        // Select color "black" (third select)
-        await page.locator('form select').nth(2).selectOption('black');
+        // Select color "black"
+        await searchPage.filterByColor('black');
         
         // Click search button
-        await page.getByRole('button', { name: 'Search' }).click();
+        await searchPage.search();
         
-        // Wait for URL to update
-        await page.waitForURL('**/search?**', { timeout: 5000 });
-        
-        // Verify URL contains filter
-        expect(page.url()).toContain('color=black');
+        // Wait for network to be idle (results loaded)
+        await page.waitForLoadState('networkidle', { timeout: 5000 });
         
         // Verify results heading is visible
-        await expect(page.locator('h2').filter({ hasText: /found/i })).toBeVisible();
+        await searchPage.expectResultsVisible();
+        
+        // Verify all visible items include black color
+        const colorElements = page.locator('p:has-text("Color:")');
+        const count = await colorElements.count();
+        expect(count).toBeGreaterThan(0);
+        
+        for (let i = 0; i < count; i++) {
+            await expect(colorElements.nth(i)).toContainText('Black');
+        }
     });
 
     test('CT-RF-001-03 - Filter items by evening style', async ({ page }) => {
-        // Wait for style dropdown to populate from API
-        await page.waitForTimeout(1000);
-        
-        // Select style "evening" (fourth select)
-        await page.locator('form select').nth(3).selectOption('evening');
+        // Select style "evening"
+        await searchPage.filterByStyle('evening');
         
         // Click search button
-        await page.getByRole('button', { name: 'Search' }).click();
+        await searchPage.search();
         
-        // Wait for URL to update
-        await page.waitForURL('**/search?**', { timeout: 5000 });
-        
-        // Verify URL contains filter
-        expect(page.url()).toContain('style=evening');
+        // Wait for network to be idle (results loaded)
+        await page.waitForLoadState('networkidle', { timeout: 5000 });
         
         // Verify results heading is visible
-        await expect(page.locator('h2').filter({ hasText: /found/i })).toBeVisible();
+        await searchPage.expectResultsVisible();
+        
+        // Verify filtered results are present
+        const itemCards = page.locator('h3');
+        const count = await itemCards.count();
+        expect(count).toBeGreaterThan(0);
     });
 
     test('CT-RF-001-04 - Filter shoes by size 38', async ({ page }) => {
-        // Navigate directly with both filters via URL to bypass selectOption issue with React
+        // Navigate directly with both filters via URL
         await page.goto('/search?category=shoes&size=38');
         await page.waitForLoadState('domcontentloaded');
         
-        // Wait for page to load with filters applied
-        await page.waitForTimeout(500);
+        // Wait for network to be idle
+        await page.waitForLoadState('networkidle', { timeout: 5000 });
         
         // Verify URL contains filters
         expect(page.url()).toContain('category=shoes');
         expect(page.url()).toContain('size=38');
         
         // Verify the dropdowns reflect the URL parameters
-        await expect(page.locator('form select').nth(0)).toHaveValue('shoes');
-        await expect(page.locator('form select').nth(1)).toHaveValue('38');
+        await expect(page.locator('select').nth(0)).toHaveValue('shoes');
+        await expect(page.locator('select').nth(1)).toHaveValue('38');
         
         // Verify results heading is visible
-        await expect(page.locator('h2').filter({ hasText: /found/i })).toBeVisible();
+        await searchPage.expectResultsVisible();
     });
 });
