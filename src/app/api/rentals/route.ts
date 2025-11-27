@@ -29,6 +29,9 @@ export async function POST(req: Request) {
   const item = getItem(itemId);
   if (!item) return NextResponse.json({ error: "Item not found" }, { status: 404 });
   if (end < start) return NextResponse.json({ error: "End date must be after start date" }, { status: 400 });
+  
+  const today = new Date().toISOString().split('T')[0];
+  if (start < today) return NextResponse.json({ error: "Start date cannot be in the past" }, { status: 400 });
 
   if (!isItemAvailable(itemId, start, end)) {
     const res = NextResponse.redirect(new URL(`/items/${itemId}?unavailable=1`, req.url));

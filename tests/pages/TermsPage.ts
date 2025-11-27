@@ -1,16 +1,20 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { BasePage } from './BasePage';
 
-export class TermsPage {
-    readonly page: Page;
+export class TermsPage extends BasePage {
     readonly mainHeading: Locator;
     readonly termsSections: Locator;
     readonly lastUpdatedNotice: Locator;
 
     constructor(page: Page) {
-        this.page = page;
+        super(page);
         this.mainHeading = page.getByRole('heading', { name: 'Terms & Conditions', level: 1 });
         this.termsSections = page.getByRole('heading', { level: 2 });
         this.lastUpdatedNotice = page.getByText('Last Updated');
+    }
+
+    async goto() {
+        await super.goto('terms');
     }
 
     async expectPageVisible() {
